@@ -1,0 +1,647 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Merged PRs",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 0
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_pr"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_pr"
+          },
+          "timeField": "@timestamp",
+          "query": "state:MERGED AND scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1y"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {}
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Avg PR review time (min)",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 0
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_review"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_review"
+          },
+          "timeField": "@timestamp",
+          "query": "status:APPROVED AND scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "avg",
+              "field": "review_elapsed_minutes"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1y"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {},
+          "unit": "min"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Quality: PRs merged without changes requested",
+      "description": "Share of merged PRs that never had a change request. Higher is healthier.",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 0
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_pr"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_pr"
+          },
+          "timeField": "@timestamp",
+          "query": "state:MERGED AND sentiment:\"ok\" AND scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1y"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {},
+          "unit": "percentunit"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Commits",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 0
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_commit"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_commit"
+          },
+          "timeField": "@timestamp",
+          "query": "scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1y"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {}
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Merged PRs per month: engaged vs passive devs",
+      "description": "PRs grouped by whether the author is a Copilot user (engaged = has license; passive = no license).",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_pr"
+      },
+      "targets": [
+        {
+          "refId": "engaged",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_pr"
+          },
+          "timeField": "@timestamp",
+          "query": "state:MERGED AND copilot_user:true AND scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1M"
+              }
+            }
+          ]
+        },
+        {
+          "refId": "passive",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_pr"
+          },
+          "timeField": "@timestamp",
+          "query": "state:MERGED AND copilot_user:false AND scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1M"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": []
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 15
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "engaged"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "PR changes requested before merge (rework)",
+      "description": "P1 stat for quality. In good scenarios this falls after rollout; in bad scenarios it climbs.",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_review"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_review"
+          },
+          "timeField": "@timestamp",
+          "query": "status:CHANGES_REQUESTED AND scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1M"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": []
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 60,
+            "lineWidth": 1
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Median time-to-merge per month (min)",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_pr"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_pr"
+          },
+          "timeField": "@timestamp",
+          "query": "state:MERGED AND scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "percentiles",
+              "settings": {
+                "field": "minutes_to_merge",
+                "percents": [
+                  "50"
+                ]
+              }
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1M"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": []
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2
+          },
+          "unit": "min"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Commits per month",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_commit"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_commit"
+          },
+          "timeField": "@timestamp",
+          "query": "scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1M"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": []
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 15
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "text",
+      "title": "How to read velocity",
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "options": {
+        "content": "### Velocity\n\n- The ideal story (good scenario): **merged PRs up, time-to-merge down, rework flat or down**.\n- Engaged vs passive compares development with and without Copilot within the same window — the cleanest attribution available with Bitbucket.\n- **Bad scenario warning**: PR count flat/down, time-to-merge up, rework climbing while Copilot cost is being paid — spend without payoff.",
+        "mode": "markdown"
+      }
+    }
+  ],
+  "refresh": "1h",
+  "schemaVersion": 39,
+  "tags": [
+    "copilot",
+    "productivity",
+    "velocity"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "*"
+        },
+        "hide": 0,
+        "label": "Scenario",
+        "multi": false,
+        "name": "scenario",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "*"
+          },
+          {
+            "selected": false,
+            "text": "Good (high ROI)",
+            "value": "good"
+          },
+          {
+            "selected": false,
+            "text": "Bad (low ROI)",
+            "value": "bad"
+          },
+          {
+            "selected": false,
+            "text": "Production (real)",
+            "value": "real"
+          }
+        ],
+        "query": "*,good,bad,real",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6M",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "03 — Productivity & Velocity",
+  "uid": "copilot-hv-produtividade",
+  "version": 2
+}

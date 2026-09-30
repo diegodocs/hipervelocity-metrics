@@ -1,0 +1,570 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Copilot users",
+      "description": "Distinct developers with a Copilot license (identity map).",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 0
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_adoption"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_adoption"
+          },
+          "timeField": "@timestamp",
+          "query": "scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "cardinality",
+              "field": "user"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1y"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {}
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Active users",
+      "description": "Distinct developers with COMpletion/chat activity in the currently selected dashboard range.",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 0
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_adoption"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_adoption"
+          },
+          "timeField": "@timestamp",
+          "query": "scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "cardinality",
+              "field": "user"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1y"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {}
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Avg daily acceptance rate",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 0
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_adoption"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_adoption"
+          },
+          "timeField": "@timestamp",
+          "query": "scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "avg",
+              "field": "acceptance_rate"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1y"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {},
+          "unit": "percentunit",
+          "decimals": 2
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "barchart",
+      "title": "Active users by IDE",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_adoption"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_adoption"
+          },
+          "timeField": "@timestamp",
+          "query": "scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "cardinality",
+              "field": "user"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "terms",
+              "field": "ide",
+              "settings": {
+                "size": "10",
+                "order": "desc",
+                "orderBy": "_count"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "showValue": "auto",
+        "orientation": "auto",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "barAlignment": 0,
+            "fillOpacity": 90,
+            "lineWidth": 1
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Daily active users and acceptance rate",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_adoption"
+      },
+      "targets": [
+        {
+          "refId": "users",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_adoption"
+          },
+          "timeField": "@timestamp",
+          "query": "scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "cardinality",
+              "field": "user"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1d"
+              }
+            }
+          ]
+        },
+        {
+          "refId": "acc",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_adoption"
+          },
+          "timeField": "@timestamp",
+          "query": "scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "avg",
+              "field": "acceptance_rate"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1d"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": []
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 15
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Acceptance rate by team",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_adoption_team"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_adoption_team"
+          },
+          "timeField": "@timestamp",
+          "query": "scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "avg",
+              "field": "acceptance_rate"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1w"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "table",
+      "title": "Adoption by team (last 28 days)",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_adoption_team"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_adoption_team"
+          },
+          "timeField": "@timestamp",
+          "query": "scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "avg",
+              "field": "acceptance_rate"
+            },
+            {
+              "id": "2",
+              "type": "avg",
+              "field": "accepted_suggestions"
+            },
+            {
+              "id": "3",
+              "type": "avg",
+              "field": "suggestions_count"
+            },
+            {
+              "id": "4",
+              "type": "avg",
+              "field": "active_users"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "5",
+              "type": "terms",
+              "field": "team",
+              "settings": {
+                "size": "20",
+                "order": "desc",
+                "orderBy": "_count"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "showHeader": true
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "text",
+      "title": "How to read adoption",
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "options": {
+        "content": "### Adoption\n\n- **License + usage**: the good baseline is > **80%** active users and daily acceptance rate between **25–35%**.\n- **Growing agents**: monitor IDE-only completion vs agent-mode usage — agent mode should take over high-complexity tasks over time.\n- **Teams**: adoption below **50%** or acceptance below **15%** is the classic signal that value is being left on the table.",
+        "mode": "markdown"
+      }
+    }
+  ],
+  "refresh": "1h",
+  "schemaVersion": 39,
+  "tags": [
+    "copilot",
+    "adoption"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "*"
+        },
+        "hide": 0,
+        "label": "Scenario",
+        "multi": false,
+        "name": "scenario",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "*"
+          },
+          {
+            "selected": false,
+            "text": "Good (high ROI)",
+            "value": "good"
+          },
+          {
+            "selected": false,
+            "text": "Bad (low ROI)",
+            "value": "bad"
+          },
+          {
+            "selected": false,
+            "text": "Production (real)",
+            "value": "real"
+          }
+        ],
+        "query": "*,good,bad,real",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6M",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "02 — Adoption & Engagement",
+  "uid": "copilot-hv-adocao",
+  "version": 2
+}

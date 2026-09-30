@@ -1,0 +1,103 @@
+apiVersion: 1
+
+# Grafana 11: the Elasticsearch data source stores the index pattern under
+# jsonData.index (the legacy top-level `database` field is ignored for date
+# pattern expansion). The `interval` (Pattern) field tells the plugin the index
+# granularity so it expands `[... ]YYYY.MM.DD` into concrete index names for
+# the selected time range.
+datasources:
+  - name: "HyperVelocity - Adoption (Copilot)"
+    uid: es_adoption
+    type: elasticsearch
+    access: proxy
+    url: http://elasticsearch:9200
+    jsonData:
+      index: "[copilot_hv.copilot.adoption-]YYYY.MM.DD"
+      interval: Daily
+      esVersion: "8.13.4"
+      timeField: "@timestamp"
+      maxConcurrentShardRequests: 5
+
+  - name: "HyperVelocity - Adoption by Team"
+    uid: es_adoption_team
+    type: elasticsearch
+    access: proxy
+    url: http://elasticsearch:9200
+    jsonData:
+      index: "[copilot_hv.copilot.adoption_team-]YYYY.MM.DD"
+      interval: Daily
+      esVersion: "8.13.4"
+      timeField: "@timestamp"
+      maxConcurrentShardRequests: 5
+
+  - name: "HyperVelocity - Enterprise Aggregates"
+    uid: es_aggregate
+    type: elasticsearch
+    access: proxy
+    url: http://elasticsearch:9200
+    jsonData:
+      index: "[copilot_hv.copilot.aggregate-]YYYY.MM.DD"
+      interval: Daily
+      esVersion: "8.13.4"
+      timeField: "@timestamp"
+      maxConcurrentShardRequests: 5
+
+  - name: "HyperVelocity - PRs (Bitbucket)"
+    uid: es_pr
+    type: elasticsearch
+    access: proxy
+    url: http://elasticsearch:9200
+    jsonData:
+      index: "[copilot_hv.bitbucket.pr-]YYYY.MM.DD"
+      interval: Daily
+      esVersion: "8.13.4"
+      timeField: "@timestamp"
+      maxConcurrentShardRequests: 5
+
+  - name: "HyperVelocity - Code Review (Bitbucket)"
+    uid: es_review
+    type: elasticsearch
+    access: proxy
+    url: http://elasticsearch:9200
+    jsonData:
+      index: "[copilot_hv.bitbucket.review-]YYYY.MM.DD"
+      interval: Daily
+      esVersion: "8.13.4"
+      timeField: "@timestamp"
+      maxConcurrentShardRequests: 5
+
+  - name: "HyperVelocity - Commits (Bitbucket)"
+    uid: es_commit
+    type: elasticsearch
+    access: proxy
+    url: http://elasticsearch:9200
+    jsonData:
+      index: "[copilot_hv.bitbucket.commit-]YYYY.MM.DD"
+      interval: Daily
+      esVersion: "8.13.4"
+      timeField: "@timestamp"
+      maxConcurrentShardRequests: 5
+
+  - name: "HyperVelocity - Jira"
+    uid: es_jira
+    type: elasticsearch
+    access: proxy
+    url: http://elasticsearch:9200
+    jsonData:
+      index: "[copilot_hv.jira.issue-]YYYY.MM.DD"
+      interval: Daily
+      esVersion: "8.13.4"
+      timeField: "@timestamp"
+      maxConcurrentShardRequests: 5
+
+  - name: "HyperVelocity - Finance (Investments)"
+    uid: es_finance
+    type: elasticsearch
+    access: proxy
+    url: http://elasticsearch:9200
+    jsonData:
+      index: "[copilot_hv.finance.expense-]YYYY.MM.DD"
+      interval: Daily
+      esVersion: "8.13.4"
+      timeField: "@timestamp"
+      maxConcurrentShardRequests: 5

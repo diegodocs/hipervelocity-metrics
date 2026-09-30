@@ -1,0 +1,602 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Developers using agent mode",
+      "description": "Distinct developers with agent-mode activity (Copilot Usage Metrics: total_agent_users / agent_chat).",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 0
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_adoption"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_adoption"
+          },
+          "timeField": "@timestamp",
+          "query": "agent_users:true AND scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "cardinality",
+              "field": "user"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1y"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {}
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Median time-to-merge (min)",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 0
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_pr"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_pr"
+          },
+          "timeField": "@timestamp",
+          "query": "state:MERGED AND scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "percentiles",
+              "settings": {
+                "field": "minutes_to_merge",
+                "percents": [
+                  "50"
+                ]
+              }
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1y"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "unit": "min"
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Issues delivered (done) — 6 months",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 0
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_jira"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_jira"
+          },
+          "timeField": "@timestamp",
+          "query": "status:Done AND scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1y"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {}
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Median cycle time (days)",
+      "description": "Jira issue time from created to done.",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 0
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_jira"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_jira"
+          },
+          "timeField": "@timestamp",
+          "query": "status:Done AND scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "percentiles",
+              "settings": {
+                "field": "cycle_days",
+                "percents": [
+                  "50"
+                ]
+              }
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1y"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {},
+          "unit": "d"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Agent-mode users per month",
+      "description": "Developers progressing from IDE completion to agent mode. Growing in good scenarios, flat/zero in bad.",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_adoption"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_adoption"
+          },
+          "timeField": "@timestamp",
+          "query": "agent_users:true AND scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "cardinality",
+              "field": "user"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1M"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": []
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 15
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Issues delivered per month (done)",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_jira"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_jira"
+          },
+          "timeField": "@timestamp",
+          "query": "status:Done AND scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1M"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": []
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "table",
+      "title": "Throughput by team (PRs + issues)",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_pr"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_pr"
+          },
+          "timeField": "@timestamp",
+          "query": "state:MERGED AND scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "terms",
+              "field": "team",
+              "settings": {
+                "size": "10",
+                "order": "desc",
+                "orderBy": "_count"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "showHeader": true
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Story point hours + velocity proxy",
+      "description": "Jira business-focused view: story points delivered per week as a product-teams proxy.",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "es_jira"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "es_jira"
+          },
+          "timeField": "@timestamp",
+          "query": "status:Done AND scenario:${scenario}",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "sum",
+              "field": "story_points"
+            }
+          ],
+          "bucketAggs": [
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "field": "@timestamp",
+              "settings": {
+                "interval": "1w"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": []
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 50,
+            "lineWidth": 1
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "text",
+      "title": "How to read hypervelocity",
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "options": {
+        "content": "### Hypervelocity\n\n- Agent mode is the next productivity S-curve: **+78%** PRs moving code-first → agent-first (GitHub impact dashboard) and **3×** week-over-week PR velocity in top agent-first shops.\n- **Good scenario**: agent users grow month over month and throughput compounds. **Bad scenario**: developers stay on autocomplete only — licenses paid, acceleration never materializes.\n- Track **agent mode % of PRs** and pair with adoption → feedback loops and agent-first hackathons to move the curve.",
+        "mode": "markdown"
+      }
+    }
+  ],
+  "refresh": "1h",
+  "schemaVersion": 39,
+  "tags": [
+    "copilot",
+    "agents",
+    "hypervelocity"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "*"
+        },
+        "hide": 0,
+        "label": "Scenario",
+        "multi": false,
+        "name": "scenario",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "*"
+          },
+          {
+            "selected": false,
+            "text": "Good (high ROI)",
+            "value": "good"
+          },
+          {
+            "selected": false,
+            "text": "Bad (low ROI)",
+            "value": "bad"
+          },
+          {
+            "selected": false,
+            "text": "Production (real)",
+            "value": "real"
+          }
+        ],
+        "query": "*,good,bad,real",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6M",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "05 — Hypervelocity (Agents)",
+  "uid": "copilot-hv-hipervelocidade",
+  "version": 2
+}
